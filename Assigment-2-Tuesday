@@ -24,3 +24,12 @@ db.products1.find({$and: [{ color: { $nin: ["gold"] } },{ $or: [{ price: { $lt: 
 
 9)Find products that have both a RAM size greater than 8GB and a CPU speed less than 2 GHz, or do not have a storage option of 256GB.
 db.products.find({$or: [{ $and: [{ "spec.ram": { $gt: 8 } },{ "spec.cpu": { $lt: 2 } }] },{ storage: { $nin: [256] } }]})
+
+10)find name,price,storage if price is 699 or storage is 1024
+db.products1.find({$or: [{price: 699},{storage: 1024}]},{name: 1,price: 1,storage: 1 })
+
+11)Find the product cpu is not  less than 3 ,not isodate is ("2011-09-01")
+db.products1.find({$and: [{'spec.cpu': {$not: { $lt: 3 } } },{ releaseDate: {$not: {$eq: ISODate("2011-09-01") }}}]})
+
+12)Find the product no color is blue,no price is 899
+db.products1.find({$nor: [{color: "blue"},{price: 899}]})
