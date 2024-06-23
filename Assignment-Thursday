@@ -1,0 +1,25 @@
+1.Find the average quantity sold for each item where the price is greater than $10, then sort these averages in descending order, skip the first result, and limit the output to 2 items.
+db.sales.aggregate([ { $group: { _id: null, totalRevenue: { $sum: { $multiply: ["$price", "$quantity"] } } } } ])
+
+2.Identify the total quantity sold for each item, but only include those items where the maximum price recorded is at least $25.
+Then, sort the results by the total quantity in ascending order and limit the result to 1 item.
+db.sales.aggregate([ { $match: { item: "Americano" } }, { $group: { _id: null, totalAmericanos: { $sum: "$quantity" } } } ])
+
+3.Calculate the total and average quantity sold for each item where the size is "Grande",
+then sort the results first by the total quantity in descending order and then by the average quantity in descending order. Skip the first result and limit the output to 2 items.
+db.sales.updateMany({ item: "Latte" }, { $inc: { price: 5 } })
+
+4.the total revenue generated from all sales
+db.sales.updateMany({ price: { $lt: 10 } }, { $unset: { size: "" } })
+
+5.How many “Americanos” were sold in total?
+db.sales.aggregate([ { $match: { price: { $gt: 10 } } }, { $group: { _id: "$item", averageQuantity: { $avg: "$quantity" } } }, { $sort: { averageQuantity: -1 } }, { $skip: 1 }, { $limit: 2 } ])
+
+6.Increase the price of “Lattes” by 5 units 
+db.sales.aggregate([ { $unwind: "$price" }, { $group: { _id: "$item", maxPrice: { $max: "$price" } } }, { $match: { maxPrice: { $gte: 25 } } }, { $group: { _id: "$item", totalQuantity: { $sum: "$quantity" } } }, { $sort: { totalQuantity: 1 } }, { $limit: 1 } ])
+
+7.Unset the “size” field for all records where the price is less than 10.
+db.sales.aggregate([ { $match: { size: "Grande" } }, { $group: { _id: "$item", totalQuantity: { $sum: "$quantity" }, averageQuantity: { $avg: "$quantity" } } }, { $sort: { totalQuantity: -1, averageQuantity: -1 } }, { $skip: 1 }, { $limit: 2 } ])
+
+8.What is the total quantity and average price of each type and size of coffee, sorted by total quantity in descending order
+db.sales.aggregate([{$unwind:"$size"},{$group:{_id:{item:"$item",size:"$size"},totalQuantity:{$sum:"$quantity"},averagePrice:{$avg:"$price"}}},{$sort:{totalQuantity:-1}}]).toJSON()
