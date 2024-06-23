@@ -22,4 +22,4 @@ db.sales.aggregate([ { $unwind: "$price" }, { $group: { _id: "$item", maxPrice: 
 db.sales.aggregate([ { $match: { size: "Grande" } }, { $group: { _id: "$item", totalQuantity: { $sum: "$quantity" }, averageQuantity: { $avg: "$quantity" } } }, { $sort: { totalQuantity: -1, averageQuantity: -1 } }, { $skip: 1 }, { $limit: 2 } ])
 
 8.What is the total quantity and average price of each type and size of coffee, sorted by total quantity in descending order
-db.sales.aggregate([{$unwind:"$size"},{$group:{_id:{item:"$item",size:"$size"},totalQuantity:{$sum:"$quantity"},averagePrice:{$avg:"$price"}}},{$sort:{totalQuantity:-1}}]).toJSON()
+db.sales.aggregate([{$unwind:"$size"},{$group:{_id:{item:"$item",size:"$size"},totalQuantity:{$sum:"$quantity"},averagePrice:{$avg:"$price"}}},{$sort:{totalQuantity:-1}}])
