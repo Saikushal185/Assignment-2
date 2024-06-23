@@ -14,10 +14,10 @@ db.products.find({storage:{ $all: [128, 256]}})
 db.products6.find({color:{$size:3,$all: ["white", "black", "purple"]}})
 
 6.Find the top 2 products with the highest cpu speed and where the price is between 600 and 1000.
-db.products.find({price: { $gte: 600, $lte: 1000 }}).sort({"spec.cpu_speed": -1 }).limit(2)
+db.products.find({price:{$gte:600,$lte:1000}}).sort({"spec.cpu_speed":-1}).limit(2)
 
 7.Find all products where the price field exists and is a number. The cpu speed is greater than 2 GHz. The storage array contains the value 512.
-db.products.find({price: { $exists: true, $type: "number" },"spec.cpu_speed": { $gt: 2 },storage: 512})
+db.products.find({price:{$exists:true,$type:"number"},"spec.cpu_speed":{ $gt:2},storage:512})
 
-8.Update products where the spec.ram is less than 8 and the spec.screen is greater than 7, setting their price to a specific value.
-db.products.updateMany({"spec.ram": { $lt: 8 }, "spec.screen": { $gt: 7 } },{$set: { price: SPECIFIC_PRICE } })
+8.Update products where the spec.ram is less than 8 and the spec.screen is greater than 7, setting their price to a 500.
+db.products.updateMany({"spec.ram":{$lt:8},"spec.screen":{$gt:7}},{$set:{price:500}})
